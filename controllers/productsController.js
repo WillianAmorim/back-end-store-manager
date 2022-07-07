@@ -1,15 +1,25 @@
+const productsService = require('../services/productService');
 const productsModel = require('../models/productsModel');
 
 const getAll = async (_req, res) => {
-  try {
     const products = await productsModel.getAll();
 
     return res.status(200).json(products);
-  } catch (error) {
-    return res.status(404).json({ message: 'Product not found' });
+};
+
+const getById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await productsService.getById(id);
+  
+    return res.status(200).json(product);
+  } catch (e) {
+    res.status(e.status).json(e.message);
   }
 };
 
 module.exports = {
   getAll,
+  getById,
 };
