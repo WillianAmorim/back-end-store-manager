@@ -1,6 +1,14 @@
 const productModel = require('../models/productsModel');
 const errorMensage = require('../error/notFoundError');
 
+const nameValidade = (name) => {
+  if (!name) throw errorMensage(400, { message: '"name" is required' });
+
+  if (name.length < 5) {
+    throw errorMensage(422, { message: '"name" length must be at least 5 characters long' });
+  }
+};
+
 const getById = async (id) => {
   const product = await productModel.getById(id);
 
@@ -10,6 +18,7 @@ const getById = async (id) => {
 };
 
 const create = async (name) => {
+  nameValidade(name);
   const product = await productModel.create(name);
 
   return product;
