@@ -16,7 +16,20 @@ const getById = async (id) => {
   return product;
 };
 
+const create = async (name) => {
+  const sql = 'INSERT INTO StoreManager.products (name) VALUES (?);';
+
+  const [{ insertId }] = await mysql.execute(sql, [name]);
+
+  const listAll = await getAll();
+
+  const productId = listAll.find((produc) => produc.id === Number(insertId));
+
+  return productId;
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
 };
