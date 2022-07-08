@@ -8,6 +8,15 @@ const getAll = async () => {
   return produtcs;
 };
 
+const getById = async (id) => {
+  const sql = 'SELECT * FROM StoreManager.products WHERE id = ?;';
+
+  const [[product]] = await mysql.execute(sql, [id]);
+
+  return product;
+};
+
 module.exports = {
   getAll,
+  getById,
 };
