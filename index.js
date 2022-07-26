@@ -3,11 +3,17 @@ require('dotenv').config();
 
 const productsController = require('./controllers/productsController');
 
-app.get('/products', productsController.getAll);
+app.get('/products', productsController.getAllProducts);
 
 app.get('/products/:id', productsController.getById);
 
 app.post('/products', productsController.create);
+
+app.post('/sales');
+
+app.get('/sales');
+
+app.get('/sale/:id');
 
 // INICIANDO O PROJETO
 

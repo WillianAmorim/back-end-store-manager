@@ -9,6 +9,12 @@ const nameValidade = (name) => {
   }
 };
 
+const getAllProducts = async () => {
+  const allProduct = await productModel.getAllProducts();
+
+  return allProduct;
+};
+
 const getById = async (id) => {
   const product = await productModel.getById(id);
 
@@ -25,6 +31,7 @@ const create = async (name) => {
 };
 
 module.exports = {
+  getAllProducts,
   getById,
   create,
 };

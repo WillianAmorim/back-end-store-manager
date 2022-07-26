@@ -1,6 +1,6 @@
 const mysql = require('./connection');
 
-const getAll = async () => {
+const getAllProducts = async () => {
   const sql = 'SELECT * FROM StoreManager.products;';
 
   const [produtcs] = await mysql.execute(sql);
@@ -21,7 +21,7 @@ const create = async (name) => {
 
   const [{ insertId }] = await mysql.execute(sql, [name]);
 
-  const listAll = await getAll();
+  const listAll = await getAllProducts();
 
   const productId = listAll.find((produc) => produc.id === Number(insertId));
 
@@ -29,7 +29,7 @@ const create = async (name) => {
 };
 
 module.exports = {
-  getAll,
+  getAllProducts,
   getById,
   create,
 };

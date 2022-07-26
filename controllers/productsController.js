@@ -1,8 +1,7 @@
 const productsService = require('../services/productService');
-const productsModel = require('../models/productsModel');
 
-const getAll = async (_req, res) => {
-  const products = await productsModel.getAll();
+const getAllProducts = async (_req, res) => {
+  const products = await productsService.getAllProducts();
 
   return res.status(200).json(products);
 };
@@ -32,7 +31,7 @@ const create = async (req, res) => {
 };
 
 module.exports = {
-  getAll,
+  getAllProducts,
   getById,
   create,
 };
