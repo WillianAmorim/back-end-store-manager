@@ -9,6 +9,18 @@ const getAllSales = async () => {
 
   const [sales] = await mysql.execute(sql);
 
+  return sales;
+};
+
+const getById = async (id) => {
+  const sql = `SELECT s.date, sp.product_Id AS productId, sp.quantity
+    FROM StoreManager.sales_product AS sp
+    INNER JOIN StoreManager.sales AS s
+    ON sp.sale_id = s.id
+    WHERE s.id = ?;`;
+
+  const [sales] = await mysql.execute(sql, [id]);
+
   console.log(sales);
 
   return sales;
@@ -16,4 +28,5 @@ const getAllSales = async () => {
 
 module.exports = {
   getAllSales,
+  getById,
 };
