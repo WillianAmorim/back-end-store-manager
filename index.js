@@ -16,6 +16,8 @@ app.get('/sales', salesController.getAllSales);
 
 app.get('/sales/:id', salesController.getById);
 
+app.put('/products/:id', productsController.update);
+
 // INICIANDO O PROJETO
 
 // não altere esse arquivo, essa estrutura é necessária para à avaliação do projeto
