@@ -14,7 +14,7 @@ app.post('/sales');
 
 app.get('/sales', salesController.getAllSales);
 
-app.get('/sale/:id');
+app.get('/sales/:id', salesController.getById);
 
 // INICIANDO O PROJETO
 
