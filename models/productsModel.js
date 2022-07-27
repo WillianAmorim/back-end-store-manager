@@ -34,15 +34,9 @@ const update = async (id, name) => {
   await mysql.execute(sql, [name, id]);
 };
 
-const remove = async (id) => {
-  const sql = 'DELETE FROM StoreManager.products WHERE id = ?';
-  await mysql.execute(sql, [id]);
-};
-
 module.exports = {
   getAllProducts,
   getById,
   create,
   update,
-  remove,
 };
