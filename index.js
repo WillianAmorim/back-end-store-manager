@@ -2,6 +2,7 @@ const app = require('./app');
 require('dotenv').config();
 
 const productsController = require('./controllers/productsController');
+const salesController = require('./controllers/salesController');
 
 app.get('/products', productsController.getAllProducts);
 
@@ -11,7 +12,7 @@ app.post('/products', productsController.create);
 
 app.post('/sales');
 
-app.get('/sales');
+app.get('/sales', salesController.getAllSales);
 
 app.get('/sale/:id');
 
