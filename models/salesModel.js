@@ -21,8 +21,6 @@ const getById = async (id) => {
 
   const [sale] = await mysql.execute(sql, [id]);
 
-  console.log(sale);
-
   return sale;
 };
 
