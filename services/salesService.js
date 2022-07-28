@@ -17,7 +17,16 @@ const getById = async (id) => {
   return sale;
 };
 
+const remove = async (id) => {
+  const sale = await salesModel.getById(id);
+
+  if (!sale) throw errorMensage(404, { message: 'Product not found' });
+
+  await salesModel.remove(id);
+};
+
 module.exports = {
   getAllSales,
   getById,
+  remove,
 };
