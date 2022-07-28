@@ -10,8 +10,6 @@ const getAllSales = async () => {
 const getById = async (id) => {
   const sale = await salesModel.getById(id);
 
-  console.log(sale);
-
   if (sale.length <= 0) throw errorMensage(404, { message: 'Sale not found' });
 
   return sale;
@@ -20,7 +18,7 @@ const getById = async (id) => {
 const remove = async (id) => {
   const sale = await salesModel.getById(id);
 
-  if (!sale) throw errorMensage(404, { message: 'Product not found' });
+  if (sale.length <= 0) throw errorMensage(404, { message: 'Sale not found' });
 
   await salesModel.remove(id);
 };
