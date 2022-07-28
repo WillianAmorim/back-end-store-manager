@@ -21,7 +21,20 @@ const getById = async (req, res) => {
   }
 };
 
+const remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await salesService.remove(id);
+
+    return res.status(204).end();
+  } catch (e) {
+    return res.status(e.status).json(e.message);
+  }
+};
+
 module.exports = {
   getAllSales,
   getById,
+  remove,
 };
