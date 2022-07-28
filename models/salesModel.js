@@ -26,7 +26,13 @@ const getById = async (id) => {
   return sale;
 };
 
+const remove = async (id) => {
+  const sql = 'DELETE FROM StoreManager.sales WHERE id = ?';
+  await mysql.execute(sql, [id]);
+};
+
 module.exports = {
   getAllSales,
   getById,
+  remove,
 };
