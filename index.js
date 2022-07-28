@@ -22,6 +22,8 @@ app.delete('/products/:id', productsController.remove);
 
 app.delete('/sales/:id', salesController.remove);
 
+app.put('/sales/id');
+
 // INICIANDO O PROJETO
 
 // não altere esse arquivo, essa estrutura é necessária para à avaliação do projeto
