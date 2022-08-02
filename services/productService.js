@@ -45,10 +45,17 @@ const remove = async (id) => {
   await productModel.remove(id);
 };
 
+const getByQuery = async (name) => {
+  const product = await productModel.getByQuery(name);
+
+  return product;
+};
+
 module.exports = {
   getAllProducts,
   getById,
   create,
   update,
   remove,
+  getByQuery,
 };
