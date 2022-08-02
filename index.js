@@ -4,6 +4,8 @@ require('dotenv').config();
 const productsController = require('./controllers/productsController');
 const salesController = require('./controllers/salesController');
 
+app.get('/products/search', productsController.getByQuery);
+
 app.get('/products', productsController.getAllProducts);
 
 app.get('/products/:id', productsController.getById);
