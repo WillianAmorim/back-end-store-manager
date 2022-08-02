@@ -55,10 +55,24 @@ const remove = async (req, res) => {
   }
 };
 
+const getByQuery = async (req, res) => {
+  try {
+    const { q } = req.query;
+    console.log(q);
+
+    const product = await productsService.getByQuery(q);
+
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(error.status).json(error.message);
+  }
+};
+
 module.exports = {
   getAllProducts,
   getById,
   create,
   update,
   remove,
+  getByQuery,
 };
