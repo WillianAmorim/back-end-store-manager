@@ -39,10 +39,18 @@ const remove = async (id) => {
   await mysql.execute(sql, [id]);
 };
 
+const getByQuery = async (name) => {
+  const sql = 'SELECT * FROM StoreManager.products WHERE name LIKE ?';
+  const [item] = await mysql.execute(sql, [`%${name}%`]);
+  console.log(item);
+  return item;
+};
+
 module.exports = {
   getAllProducts,
   getById,
   create,
   update,
   remove,
+  getByQuery,
 };
