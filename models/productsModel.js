@@ -1,56 +1,46 @@
 const mysql = require('./connection');
 
-const getAllProducts = async () => {
-  const sql = 'SELECT * FROM StoreManager.products;';
+const productsModel = {
+  async getAll() {
+    const sql = 'select * from StoreManager.products';
+    const [items] = await mysql.execute(sql);
+    return items;
+  },
 
-  const [produtcs] = await mysql.execute(sql);
+  async getById(id) {
+    const sql = 'select * from StoreManager.products where id = ?';
+    const [[item]] = await mysql.execute(sql, [id]);
+    return item;
+  },
 
-  return produtcs;
+  async create(data) {
+    const sql = 'insert into StoreManager.products (name) values (?)';
+    const [{ insertId }] = await mysql.execute(sql, [data.name]);
+    return insertId;
+  },
+
+  async update(name, id) {
+    const sql = 'UPDATE StoreManager.products SET name = ? WHERE id = ?';
+    await mysql.execute(sql, [name, id]);
+  },
+
+  async remove(id) {
+    const sql = 'DELETE FROM StoreManager.products WHERE id = ?';
+    await mysql.execute(sql, [id]);
+  },
+
+  async getByQuery(name) {
+    const sql = 'SELECT * FROM StoreManager.products WHERE name LIKE ?';
+    const [item] = await mysql.execute(sql, [`%${name}%`]);
+    return item;
+  },
+
+  async exists(id) {
+    const sql = 'SELECT 1 FROM StoreManager.products WHERE id = ?';
+    const [[item]] = await mysql.execute(sql, [id]);
+    return !!item;
+  },
+
 };
 
-const getById = async (id) => {
-  const sql = 'SELECT * FROM StoreManager.products WHERE id = ?;';
-
-  const [[product]] = await mysql.execute(sql, [id]);
-
-  return product;
-};
-
-const create = async (name) => {
-  const sql = 'INSERT INTO StoreManager.products (name) VALUES (?);';
-
-  const [{ insertId }] = await mysql.execute(sql, [name]);
-
-  const listAll = await getAllProducts();
-
-  const productId = listAll.find((produc) => produc.id === Number(insertId));
-
-  return productId;
-};
-
-const update = async (id, name) => {
-  const sql = 'UPDATE StoreManager.products SET name = ? WHERE id = ?;';
-
-  await mysql.execute(sql, [name, id]);
-};
-
-const remove = async (id) => {
-  const sql = 'DELETE FROM StoreManager.products WHERE id = ?';
-  await mysql.execute(sql, [id]);
-};
-
-const getByQuery = async (name) => {
-  const sql = 'SELECT * FROM StoreManager.products WHERE name LIKE ?';
-  const [item] = await mysql.execute(sql, [`%${name}%`]);
-  console.log(item);
-  return item;
-};
-
-module.exports = {
-  getAllProducts,
-  getById,
-  create,
-  update,
-  remove,
-  getByQuery,
-};
+module.exports = productsModel; 
