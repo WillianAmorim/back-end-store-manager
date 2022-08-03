@@ -155,15 +155,23 @@ describe('/controllers/productsController', () => {
     });
 
     it('deve retornar o status 200 e o produto atualizado', async () => {
-      sinon.stub(productsService, 'validateParamsId').resolves({});
-      sinon.stub(productsService, 'validateBodyAdd').resolves({});
+      const req = {
+        params: {
+          id: '1'
+        },
+        body: {
+          name: 'qualquer'
+        }
+      }
+      sinon.stub(productsService, 'validateParamsId').resolves(req.params);
+      sinon.stub(productsService, 'validateBodyAdd').resolves(req.body);
       sinon.stub(productsService, 'verifyItem').resolves();
       sinon.stub(productsService, 'getById').resolves({});
       const res = {
         status: sinon.stub().callsFake(() => res),
         json: sinon.stub().returns(),
       };
-      await productsController.update({}, res);
+      await productsController.update(req, res);
       chai.expect(res.status.getCall(0).args[0]).to.equal(200);
       chai.expect(res.json.getCall(0).args[0]).to.deep.equal({});
     });
