@@ -1,53 +1,25 @@
+const productsService = require('../services/productService');
 const salesService = require('../services/salesService');
 
-const getAllSales = async (_req, res) => {
-  try {
-    const sales = await salesService.getAllSales();
+const salesController = {
+  async getAll(_req, res) {
+    const items = await salesService.getAll();
+    return res.status(200).json(items);
+  },
 
-    return res.status(200).json(sales);
-  } catch (e) {
-    return res.status(e.status).json(e.message);
-  }
-};
+  async getById(req, res) {
+    const { id } = await productsService.validateParamsId(req.params);
+    await salesService.verifyItem(id);
+    const item = await salesService.getById(id);
+    return res.status(200).json(item);
+  },
 
-const getById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const sale = await salesService.getById(id);
-
-    return res.status(200).json(sale);
-  } catch (e) {
-    return res.status(e.status).json(e.message);
-  }
-};
-
-const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-
+  async remove(req, res) {
+    const { id } = await productsService.validateParamsId(req.params);
+    await salesService.verifyItem(id);
     await salesService.remove(id);
-
-    return res.status(204).end();
-  } catch (e) {
-    return res.status(e.status).json(e.message);
-  }
+    return res.sendStatus(204);
+  },
 };
 
-const update = async (req, res) => {
-  try {
-    const { productId, quantity } = req.body;
-
-    const saleUpdate = await salesService.update(productId, quantity);
-
-    return res.status(200).end(saleUpdate);
-  } catch (e) {
-    return res.status(e.status).json(e.message);
-  }
-};
-
-module.exports = {
-  getAllSales,
-  getById,
-  remove,
-  update,
-};
+module.exports = salesController;
