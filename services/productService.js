@@ -1,61 +1,50 @@
-const productModel = require('../models/productsModel');
-const errorMensage = require('../error/notFoundError');
+const Joi = require('joi');
+const productsModel = require('../models/productsModel');
+const { NotFoundError } = require('../middlewares/error');
+const { runSchema } = require('../middlewares/validators');
 
-const nameValidade = (name) => {
-  if (!name) throw errorMensage(400, { message: '"name" is required' });
+const productsService = {
 
-  if (name.length < 5) {
-    throw errorMensage(422, { message: '"name" length must be at least 5 characters long' });
-  }
+  validateParamsId: runSchema(Joi.object({
+      id: Joi.number().required().positive().integer(),
+    }).required()),
+
+    validateBodyAdd: runSchema(Joi.object({
+      name: Joi.string().required().min(5),
+    }).required()),
+
+  async getAll() {
+    const items = await productsModel.getAll();
+    return items;
+  },
+
+  async verifyItem(id) {
+    const exists = await productsModel.exists(id);
+    if (!exists) throw new NotFoundError('Product not found');
+  },
+
+  async getById(id) {
+    const item = await productsModel.getById(id);
+    return item;
+  },
+
+  async create(data) {
+    const id = await productsModel.create(data);
+    return id;
+  },
+
+  async update(name, id) {
+    await productsModel.update(name, id);
+  },
+
+  async remove(id) {
+    await productsModel.remove(id);
+  },
+
+  async getByQuery(name) {
+    const items = await productsModel.getByQuery(name);
+    return items;
+  },
 };
 
-const getAllProducts = async () => {
-  const allProduct = await productModel.getAllProducts();
-
-  return allProduct;
-};
-
-const getById = async (id) => {
-  const product = await productModel.getById(id);
-
-  if (!product) throw errorMensage(404, { message: 'Product not found' });
-
-  return product;
-};
-
-const create = async (name) => {
-  nameValidade(name);
-  const product = await productModel.create(name);
-
-  return product;
-};
-
-const update = async (id, name) => {
-  nameValidade(name);
-
-  await productModel.update(id, name);
-};
-
-const remove = async (id) => {
-  const product = await productModel.getById(id);
-  console.log(product);
-
-  if (!product) throw errorMensage(404, { message: 'Product not found' });
-
-  await productModel.remove(id);
-};
-
-const getByQuery = async (name) => {
-  const product = await productModel.getByQuery(name);
-
-  return product;
-};
-
-module.exports = {
-  getAllProducts,
-  getById,
-  create,
-  update,
-  remove,
-  getByQuery,
-};
+module.exports = productsService; 
