@@ -1,78 +1,46 @@
 const productsService = require('../services/productService');
 
-const getAllProducts = async (_req, res) => {
-  const products = await productsService.getAllProducts();
+const productsController = {
+  async getAll(_req, res) {
+    const items = await productsService.getAll();
+    return res.status(200).json(items);
+  },
 
-  return res.status(200).json(products);
-};
+  async getById(req, res) {
+    const { id } = await productsService.validateParamsId(req.params);
+    await productsService.verifyItem(id);
+    const item = await productsService.getById(id);
+    return res.status(200).json(item);
+  },
 
-const getById = async (req, res) => {
-  const { id } = req.params;
+  async create(req, res) {
+    const data = await productsService.validateBodyAdd(req.body);
+    const id = await productsService.create(data);
+    const item = await productsService.getById(id);
+    return res.status(201).json(item);
+  },
 
-  try {
-    const product = await productsService.getById(id);
-  
-    return res.status(200).json(product);
-  } catch (e) {
-    res.status(e.status).json(e.message);
-  }
-};
+  async update(req, res) {
+    const { name } = await productsService.validateBodyAdd(req.body);
+    const { id } = await productsService.validateParamsId(req.params);
+    await productsService.verifyItem(id);
+    await productsService.update(name, id);
+    const item = await productsService.getById(id); 
+    return res.status(200).json(item);
+  },
 
-const create = async (req, res) => {
-  const { name } = req.body;
-  
-  try {
-    const product = await productsService.create(name);
-
-    return res.status(201).json(product);
-  } catch (e) {
-    res.status(e.status).json(e.message);
-  }
-};
-
-const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name } = req.body;
-
-    await productsService.update(id, name);
-    const product = await productsService.getById(id);
-
-    return res.status(200).json(product);
-  } catch (error) {
-    return res.status(error.status).json(error.message);
-  }
-};
-
-const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
+  async remove(req, res) {
+    const { id } = await productsService.validateParamsId(req.params);
+    await productsService.verifyItem(id);
     await productsService.remove(id);
+    return res.sendStatus(204);
+  },
 
-    return res.status(204).end();
-  } catch (error) {
-    return res.status(error.status).json(error.message);
-  }
-};
-
-const getByQuery = async (req, res) => {
-  try {
+  async getByQuery(req, res) {
     const { q } = req.query;
-    console.log(q);
-
-    const product = await productsService.getByQuery(q);
-
-    return res.status(200).json(product);
-  } catch (error) {
-    return res.status(error.status).json(error.message);
-  }
+    const items = await productsService.getByQuery(q);
+    res.status(200).json(items);
+  },
 };
 
-module.exports = {
-  getAllProducts,
-  getById,
-  create,
-  update,
-  remove,
-  getByQuery,
-};
+module.exports = productsController; 
